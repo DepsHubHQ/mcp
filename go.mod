@@ -1,4 +1,4 @@
-module depshub.com/mcp
+module github.com/depshubhq/mcp
 
 go 1.23.3
 
