@@ -24,7 +24,7 @@ func main() {
 	// Only check for "http" since stdio is the default
 	if transport == "http" {
 		httpServer := server.NewStreamableHTTPServer(s)
-		log.Printf("HTTP server listening on :%s", port)
+		log.Printf("HTTP server listening on :%s/mcp", port)
 		if err := httpServer.Start(fmt.Sprintf(":%s", port)); err != nil {
 			log.Fatalf("Server error: %v", err)
 		}
