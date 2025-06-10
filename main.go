@@ -71,18 +71,21 @@ func NewMCPServer() *server.MCPServer {
 	)
 
 	listVersionsTool := mcp.NewTool("update_details",
-		mcp.WithDescription("Returns the information abou the available versions of a library or package"),
+		mcp.WithDescription("Returns the information about the potential update of a library or package. You have to include the name, ecosystem (eg NPM), and the current version of the library or package to get information about."),
 		mcp.WithString("name",
 			mcp.Required(),
+			mcp.Title("Name"),
 			mcp.Description("Name of the library or package to get information about"),
 		),
 		mcp.WithString("ecosystem",
 			mcp.Required(),
+			mcp.Title("Ecosystem"),
 			mcp.Description("Name of the ecosystem. Can be one of NPM, GO, RUBYGEMS, CARGO, PYPI"),
 		),
-		mcp.WithString("ecosystem",
+		mcp.WithString("version",
 			mcp.Required(),
-			mcp.Description("Name of the ecosystem. Can be one of NPM, GO, RUBYGEMS, CARGO, PYPI"),
+			mcp.Title("Version"),
+			mcp.Description("Current version of the library or package to get information about. You have to take the version from the project dependencies manifest file (eg package.json)"),
 		),
 	)
 
@@ -119,7 +122,7 @@ func handleUpdateDetailsTool(
 		return nil, fmt.Errorf("backend error: %s", body)
 	}
 	// Parse and format the response
-	var result map[string]interface{}
+	var result map[string]any
 	if err := json.Unmarshal(body, &result); err != nil {
 		return nil, fmt.Errorf("invalid JSON from backend: %w", err)
 	}
