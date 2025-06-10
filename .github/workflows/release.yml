@@ -32,7 +32,7 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ghcr.io/${{ github.repository.lowercase() }}:${{ github.ref_name }},ghcr.io/${{ github.repository.lowercase() }}:latest
+          tags: ghcr.io/depshubhq/mcp:${{ github.ref_name }},ghcr.io/depshubhq/mcp:latest
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
