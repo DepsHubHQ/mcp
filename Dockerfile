@@ -28,5 +28,7 @@ RUN chown appuser:appuser /app/main
 # Switch to the non-root user
 USER appuser
 
+ENV BASE_URL=https://mcp-api.depshub.com
+
 CMD ["./main"]
 EXPOSE 8080
