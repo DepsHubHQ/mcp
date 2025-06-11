@@ -34,18 +34,21 @@ You can use DepsHub MCP in two modes:
 {
   "mcpServers": {
     "depshub": {
-      "url": "http://mcp.depshub.com/mcp"
+      "url": "https://mcp.depshub.com/mcp"
     }
   }
 }
 ```
 
 ### Windsurf
+Windsurt doesn't support streamable HTTP, so you have to Docker locally.
+
 ```json
 {
   "mcpServers": {
     "depshub": {
-      "serverUrl": "http://mcp.depshub.com/mcp"
+      "command": "docker",
+      "args": ["run", "-i", "--rm", "--init", "ghcr.io/depshubhq/mcp"]
     }
   }
 }
