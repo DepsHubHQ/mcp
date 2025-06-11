@@ -11,7 +11,7 @@
 - 🌍 Supports 2M+ packages out of the box
 - 🏎️ Fast respones
   
-**Discord: [https://discord.gg/uMaGSHNjzc](https://discord.gg/NuEXZwNDtN)**
+**Discord: [https://discord.gg/NuEXZwNDtN](https://discord.gg/NuEXZwNDtN)**
 
 ## Installation
 You can use DepsHub MCP in two modes:
