@@ -8,14 +8,23 @@ import (
 	"github.com/mark3labs/mcp-go/server"
 )
 
+var port string
+var transport string
+var baseURL string
+
 func main() {
-	var port string
-	var transport string
 	flag.StringVar(&transport, "t", "stdio", "Transport type (stdio or http)")
 	flag.StringVar(&transport, "transport", "stdio", "Transport type (stdio or http)")
 
 	flag.StringVar(&port, "p", "8080", "Port for HTTP transport")
 	flag.StringVar(&port, "port", "8080", "Port for HTTP transport")
+
+	flag.StringVar(&baseURL, "b", "", "Base URL for the MCP API")
+	flag.StringVar(&baseURL, "base-url", "", "Base URL for the MCP API")
+
+	if baseURL == "" {
+		baseURL = "https://mcp-api.depshub.com"
+	}
 
 	flag.Parse()
 

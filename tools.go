@@ -19,14 +19,14 @@ func handleUpdateDetailsTool(
 	name := args["name"].(string)
 	ecosystem := args["ecosystem"].(string)
 	version := args["version"].(string)
-	// Call the actual endpoint
-	baseURL := "http://localhost:8080/update-details"
+	endpoint := fmt.Sprintf("%s/update-details", baseURL)
+
 	params := url.Values{}
 	params.Set("name", name)
 	params.Set("ecosystem", ecosystem)
 	params.Set("version", version)
 
-	resp, err := http.Get(fmt.Sprintf("%s?%s", baseURL, params.Encode()))
+	resp, err := http.Get(fmt.Sprintf("%s?%s", endpoint, params.Encode()))
 	if err != nil {
 		return nil, fmt.Errorf("failed to call backend: %w", err)
 	}
