@@ -47,6 +47,9 @@ jobs:
       contents: read
       id-token: write
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Authenticate to Google Cloud
         id: auth
         uses: google-github-actions/auth@v2
@@ -59,5 +62,4 @@ jobs:
         uses: google-github-actions/deploy-cloudrun@v2
         with:
           service: mcp-service
-          image: ghcr.io/depshubhq/mcp:${{ github.ref_name }}
-          region: us-central1
+          image:  us-central1-docker.pkg.dev/theta-style-385809/mcp-service/depshubhq/mcp:${{ github.ref_name }}
