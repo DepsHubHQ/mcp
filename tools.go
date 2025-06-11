@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"net/url"
 
@@ -57,8 +58,11 @@ func handleUpdateDetailsTool(
 		Newer versions: %s
 		Recommended new version: %s
 		Current vulnerabilities: %s
-		Current changelog diff: %s
-		`
+		Changelog summary diff:
+		%s
+
+		This is the most relevant information for the user to decide how to update.
+	`
 	var responseMessage = fmt.Sprintf(responseTemplate, result.Newer_versions, result.Recommended_version, result.Current_vulnerabilities, result.Changelog_diff)
 
 	return &mcp.CallToolResult{

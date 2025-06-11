@@ -16,17 +16,12 @@ var baseURL string
 func main() {
 	log.Printf("Starting MCP server...")
 
-	flag.StringVar(&transport, "t", "stdio", "Transport type (stdio or http)")
-	flag.StringVar(&transport, "transport", "stdio", "Transport type (stdio or http)")
-
-	flag.StringVar(&port, "p", "8080", "Port for HTTP transport")
-	flag.StringVar(&port, "port", "8080", "Port for HTTP transport")
-
-	baseURL := os.Getenv("BASE_URL")
+	port = os.Getenv("PORT")
+	transport = os.Getenv("TRANSPORT")
+	baseURL = os.Getenv("BASE_URL")
 
 	log.Printf("Using base URL: %s", baseURL)
 	log.Printf("Using transport: %s", transport)
-	log.Printf("Using port: %s", port)
 
 	if baseURL == "" {
 		baseURL = "https://mcp-api.depshub.com"
@@ -36,7 +31,7 @@ func main() {
 
 	s := NewMCPServer()
 
-	// Only check for "http" since stdio is the default
+	// Only check for "http" since "stdio" is the default
 	if transport == "http" {
 		httpServer := server.NewStreamableHTTPServer(s)
 		log.Printf("HTTP server listening on :%s/mcp", port)
