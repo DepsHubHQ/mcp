@@ -42,6 +42,9 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     environment: production
+    permissions:
+      packages: read
+      contents: read
     steps:
       - name: Authenticate to Google Cloud
         id: auth
