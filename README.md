@@ -23,7 +23,6 @@ You can use DepsHub MCP in two modes:
 {
   "mcpServers": {
     "depshub": {
-      "type": "https",
       "url": "https://mcp.depshub.com/mcp"
     }
   }
