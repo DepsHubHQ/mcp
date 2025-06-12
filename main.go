@@ -39,6 +39,7 @@ func main() {
 			log.Fatalf("Server error: %v", err)
 		}
 	} else {
+		log.Printf("Stdio server is starting...")
 		if err := server.ServeStdio(s); err != nil {
 			log.Fatalf("Server error: %v", err)
 		}
