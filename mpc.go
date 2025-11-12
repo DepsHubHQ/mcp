@@ -37,30 +37,37 @@ func NewMCPServer() *server.MCPServer {
 	})
 	s := server.NewMCPServer(
 		"DepsHub",
-		"0.1.9",
+		"0.2.0",
 		server.WithToolCapabilities(true),
 	)
 
-	listVersionsTool := mcp.NewTool("update_details",
-		mcp.WithDescription("Returns the information about the potential update of a library or package. You have to include the name, ecosystem (eg NPM), and the current version of the library or package to get information about."),
-		mcp.WithString("name",
-			mcp.Required(),
-			mcp.Title("Name"),
-			mcp.Description("Name of the library or package to get information about"),
-		),
-		mcp.WithString("ecosystem",
-			mcp.Required(),
-			mcp.Title("Ecosystem"),
-			mcp.Description("Name of the ecosystem. Can be one of NPM, GO, RUBYGEMS, CARGO, PYPI"),
-		),
-		mcp.WithString("version",
-			mcp.Required(),
-			mcp.Title("Version"),
-			mcp.Description("Current version of the library or package to get information about. You have to take the version from the project dependencies manifest file (eg package.json)"),
+	analyzeDependenciesTool := mcp.NewTool("analyze_dependencies",
+		mcp.WithDescription("Returns the information about all the available versions, security vulnerabilities, and release dates for the given libraries or packages."),
+		mcp.WithArray("packages",
+			mcp.Description("List of package PURLs to analyze"),
+			mcp.Items(map[string]any{"purl": "string"}),
 		),
 	)
 
-	s.AddTool(listVersionsTool, handleUpdateDetailsTool)
+	getUpdateInsights := mcp.NewTool("get_update_insights",
+		mcp.WithDescription("Returns update insights about specific library versions, including their changelogs, release dates, and migration guides. Use this to get information about a particular versions once you have the list of available versions from the analyze_dependencies tool."),
+		mcp.WithObject("package",
+			mcp.Description("Current version PURL and the update version PURL (including specific versions) to analyze"),
+			mcp.Properties(map[string]any{
+				"current_purl": map[string]any{
+					"type":        "string",
+					"description": "Current version PURL",
+				},
+				"update_purl": map[string]any{
+					"type":        "string",
+					"description": "Update version PURL",
+				},
+			}),
+		),
+	)
+
+	s.AddTool(analyzeDependenciesTool, handleAnalyzeDependenciesTool)
+	s.AddTool(getUpdateInsights, handleGetUpdateInsights)
 
 	return s
 }
