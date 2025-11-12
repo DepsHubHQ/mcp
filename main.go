@@ -1,47 +1,33 @@
 package main
 
 import (
-	"flag"
+	"embed"
 	"fmt"
-	"log"
 	"os"
-
-	"github.com/mark3labs/mcp-go/server"
 )
+
+//go:embed prompts/*
+var promptsFS embed.FS
 
 var port string
 var transport string
 var baseURL string
 
 func main() {
-	log.Printf("Starting MCP server...")
-
-	port = os.Getenv("PORT")
-	transport = os.Getenv("TRANSPORT")
-	baseURL = os.Getenv("BASE_URL")
-
-	log.Printf("Using base URL: %s", baseURL)
-	log.Printf("Using transport: %s", transport)
-
-	if baseURL == "" {
-		baseURL = "https://mcp-api.depshub.com"
+	if len(os.Args) < 2 {
+		runServer() // default mode
+		return
 	}
 
-	flag.Parse()
-
-	s := NewMCPServer()
-
-	// Only check for "http" since "stdio" is the default
-	if transport == "http" {
-		httpServer := server.NewStreamableHTTPServer(s)
-		log.Printf("HTTP server listening on :%s/mcp", port)
-		if err := httpServer.Start(fmt.Sprintf(":%s", port)); err != nil {
-			log.Fatalf("Server error: %v", err)
-		}
-	} else {
-		log.Printf("Stdio server is starting...")
-		if err := server.ServeStdio(s); err != nil {
-			log.Fatalf("Server error: %v", err)
-		}
+	cmd := os.Args[1]
+	switch cmd {
+	case "prompt":
+		runPrompt()
+	case "start":
+		runServer()
+	default:
+		fmt.Println("Unknown command:", cmd)
+		fmt.Println("Usage: depshub-mcp [start|prompt]")
+		os.Exit(1)
 	}
 }
