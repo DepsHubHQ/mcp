@@ -85,14 +85,18 @@ func handleAnalyzeDependenciesTool(
 		ReleaseDate       string          `json:"release_date"`
 	}
 
-	var results []PackageAnalysisData
+	type AnalyzeDependenciesResponse struct {
+		Results []PackageAnalysisData `json:"results"`
+	}
+
+	var results AnalyzeDependenciesResponse
 	if err := json.Unmarshal(respBody, &results); err != nil {
 		return nil, fmt.Errorf("invalid JSON from backend: %w", err)
 	}
 
 	// Format results for each package
 	var summaries []string
-	for _, r := range results {
+	for _, r := range results.Results {
 		var vulnIDs []string
 		for _, v := range r.Vulnerabilities {
 			vulnIDs = append(vulnIDs, v.ID)
@@ -103,7 +107,6 @@ func handleAnalyzeDependenciesTool(
 		}
 
 		summary := fmt.Sprintf(`
-
 *%s*:
 - Release date: %s
 - Newer available versions: %s
@@ -134,34 +137,30 @@ func handleGetUpdateInsights(
 ) (*mcp.CallToolResult, error) {
 	args := request.GetArguments()
 
-	rawPkgs, ok := args["packages"].([]any)
+	type PackageInput struct {
+		CurrentPurl string `json:"current_purl"`
+		UpdatePurl  string `json:"update_purl"`
+	}
+
+	rawPkg, ok := args["package"]
 	if !ok {
-		return nil, fmt.Errorf("invalid input: expected 'packages' array")
+		return nil, fmt.Errorf("invalid input: expected 'package' object")
 	}
 
-	// Each item in packages should be a map with current_purl and update_purl
-	var packages []map[string]string
-	for _, p := range rawPkgs {
-		if pkgMap, ok := p.(map[string]any); ok {
-			current, _ := pkgMap["current_purl"].(string)
-			update, _ := pkgMap["update_purl"].(string)
-			if current != "" && update != "" {
-				packages = append(packages, map[string]string{
-					"current_purl": current,
-					"update_purl":  update,
-				})
-			}
-		}
+	var p PackageInput
+	b, err := json.Marshal(rawPkg)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal package argument: %w", err)
 	}
-
-	if len(packages) == 0 {
-		return nil, fmt.Errorf("no valid packages provided")
+	if err := json.Unmarshal(b, &p); err != nil {
+		return nil, fmt.Errorf("invalid package argument: %w", err)
 	}
 
 	// Prepare request body
 	payload := map[string]any{
-		"packages": packages,
+		"package": p,
 	}
+
 	bodyBytes, err := json.Marshal(payload)
 	if err != nil {
 		return nil, fmt.Errorf("failed to encode request body: %w", err)
