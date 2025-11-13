@@ -12,7 +12,7 @@ jobs:
 
       - name: Authenticate gh
         run: |
-          echo "fail" | gh auth login --with-token
+          echo "${{ github.token }}" | gh auth login --with-token
 
       - name: Install DepsHub CLI MCP
         id: mcp
@@ -25,4 +25,4 @@ jobs:
           prompt-file: ${{ steps.mcp.outputs.codex_prompt }}
           codex-args: ${{ steps.mcp.outputs.codex_args }}
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
