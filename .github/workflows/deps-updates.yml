@@ -1,0 +1,22 @@
+name: deps-updates
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deps-updates:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Install DepsHub CLI MCP
+        id: mcp
+        uses: DepsHubHQ/github-action@main
+
+      - uses: openai/codex-action@v1
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          sandbox: workspace-write
+          prompt: ${{ steps.mcp.outputs.codex_prompt }}
+          codex-args: ${{ steps.mcp.outputs.codex_args }}
