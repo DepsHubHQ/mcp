@@ -32,5 +32,5 @@ ENV BASE_URL=https://mcp-api.depshub.com
 ENV TRANSPORT=stdio
 ENV PORT=8080
 
-CMD ["./main"]
+CMD ["/app/main"]
 EXPOSE 8080
