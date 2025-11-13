@@ -1,4 +1,5 @@
 This agent is running inside a GitHub Actions environment.
 It has access to CLI tools such as git and gh.
 The agent can create branches, commit changes, and open pull requests.
+You can have limited access to /.gocache/mod or other platform specific things, so ignore it
 Once you updated the code - create a new branch and a pull request based on the provided template.
