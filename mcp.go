@@ -8,6 +8,9 @@ import (
 	"github.com/mark3labs/mcp-go/server"
 )
 
+// Set during build using -ldflags "-X main.version=x.y.z"
+var version string
+
 func NewMCPServer() *server.MCPServer {
 	hooks := &server.Hooks{}
 	hooks.AddBeforeAny(func(ctx context.Context, id any, method mcp.MCPMethod, message any) {
@@ -37,7 +40,7 @@ func NewMCPServer() *server.MCPServer {
 	})
 	s := server.NewMCPServer(
 		"DepsHub",
-		"0.2.0",
+		version,
 		server.WithToolCapabilities(true),
 	)
 
