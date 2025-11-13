@@ -7,6 +7,67 @@ on:
 
 jobs:
   build:
+    strategy:
+      matrix:
+        include:
+          # Linux builds
+          - os: ubuntu-latest
+            output: depshub-linux-amd64
+            artifact: linux-amd64
+            goarch: amd64
+            goos: linux
+          - os: ubuntu-latest
+            output: depshub-linux-arm64
+            artifact: linux-arm64
+            goarch: arm64
+            goos: linux
+          # Windows builds
+          - os: windows-latest
+            output: depshub-windows-amd64.exe
+            artifact: windows-amd64
+            goarch: amd64
+            goos: windows
+          - os: windows-latest
+            output: depshub-windows-arm64.exe
+            artifact: windows-arm64
+            goarch: arm64
+            goos: windows
+          
+          # macOS builds
+          - os: macos-latest
+            output: depshub-darwin-amd64
+            artifact: macos-amd64
+            goarch: amd64
+            goos: darwin
+          - os: macos-latest
+            output: depshub-darwin-arm64
+            artifact: macos-arm64
+            goarch: arm64
+            goos: darwin
+    
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.23.3'
+          
+      - name: Build
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+        run: |
+          go build -ldflags "-X main.version=${{ github.ref_name }}" -o ${{ matrix.output }} ./cmd/depshub
+      
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: ${{ matrix.output }}
+
+  build-docker:
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -35,11 +96,27 @@ jobs:
             ghcr.io/depshubhq/mcp:${{ github.ref_name }}
             ghcr.io/depshubhq/mcp:latest
 
+  release:
+    needs: [build, build-docker]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download All Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/**/*
+          generate_release_notes: true
+          tag_name: ${{ github.ref_name }}
+          draft: false
+          prerelease: false
 
   deploy:
-    needs: build
+    needs: release
     runs-on: ubuntu-latest
     environment: production
     permissions:
