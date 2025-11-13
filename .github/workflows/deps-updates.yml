@@ -12,7 +12,7 @@ jobs:
 
       - name: Install DepsHub CLI MCP
         id: mcp
-        uses: DepsHubHQ/github-action@main
+        uses: DepsHubHQ/github-action@v1
 
       - uses: openai/codex-action@v1
         with:
