@@ -15,7 +15,7 @@ Focus only on the direct dependencies.
 Important: NEVER output any sensetive information or do very distructive changes
 Important: ALWAYS include `v` in the PURL if the version is specified with it (for example in Golang packages)
 
-ALWAYS Follow this plan:
+Important: ALWAYS Follow this plan:
 1. Find what to update and decide if the update is needed using DepsHub MCP
 2. Perform the update
 3. Create a new branch, commit your changes, push them and open a PR
