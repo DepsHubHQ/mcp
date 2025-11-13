@@ -10,10 +10,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
-      - name: Authenticate gh
-        run: |
-          echo "${{ github.token }}" | gh auth login --with-token
-
       - name: Install DepsHub CLI MCP
         id: mcp
         uses: DepsHubHQ/github-action@v1
