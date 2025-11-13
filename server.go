@@ -16,12 +16,12 @@ func runServer() {
 	transport = os.Getenv("TRANSPORT")
 	baseURL = os.Getenv("BASE_URL")
 
+	if baseURL == "" {
+		baseURL = "https://mcp-api.depshub.com"
+	}
+
 	log.Printf("Using base URL: %s", baseURL)
 	log.Printf("Using transport: %s", transport)
-
-	if baseURL == "" {
-		baseURL = "http://localhost:8080"
-	}
 
 	flag.Parse()
 
