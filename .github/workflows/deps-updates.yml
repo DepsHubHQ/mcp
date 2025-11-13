@@ -20,3 +20,5 @@ jobs:
           safety-strategy: unsafe
           prompt: ${{ steps.mcp.outputs.codex_prompt }}
           codex-args: ${{ steps.mcp.outputs.codex_args }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
