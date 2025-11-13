@@ -17,7 +17,6 @@ jobs:
       - uses: openai/codex-action@v1
         with:
           openai-api-key: ${{ secrets.OPENAI_API_KEY }}
-          safety-strategy: unprivileged-user
-          sandbox: workspace-write
+          safety-strategy: unsafe
           prompt: ${{ steps.mcp.outputs.codex_prompt }}
           codex-args: ${{ steps.mcp.outputs.codex_args }}
