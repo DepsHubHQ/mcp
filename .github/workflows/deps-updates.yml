@@ -18,7 +18,7 @@ jobs:
         with:
           openai-api-key: ${{ secrets.OPENAI_API_KEY }}
           safety-strategy: unsafe
-          prompt: ${{ steps.mcp.outputs.codex_prompt }}
+          prompt-file: ${{ steps.mcp.outputs.codex_prompt }}
           codex-args: ${{ steps.mcp.outputs.codex_args }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
